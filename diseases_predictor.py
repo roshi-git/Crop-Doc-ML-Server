@@ -31,4 +31,4 @@ class DiseasePredictor:
             "status":"SUCCESS",
             "prediction": prediction,
             "image_URL": image_URL
-            }
+        }
