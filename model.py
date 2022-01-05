@@ -7,9 +7,11 @@ from tensorflow.keras.preprocessing.image import load_img
 from skimage.feature import hog #verison 0.18.3
 from PIL import Image
 
-class Detection:
+
+class Model:
 
   def __init__(self):
+    self.img_size = (256,256)
     self.seg_model = keras.models.load_model('tomato.h5', custom_objects={"dice_coef": self.dice_coef, "iou_coef":self.iou_coef})
     self.class_model = keras.models.load_model('mixed_best_model0.hdf5', custom_objects={"recall": self.recall, "precision":self.precision})
 
@@ -52,21 +54,21 @@ class Detection:
 
   def classify(self, Pic_Path):
 
-    img = load_img(Pic_Path, target_size=img_size)
-    x = np.zeros((1,) + img_size + (3,), dtype="float32")
+    img = load_img(Pic_Path, target_size=self.img_size)
+    x = np.zeros((1,) + self.img_size + (3,), dtype="float32")
     x[0] = img
     mask = self.seg_model.predict(x)
     mask = np.argmax(mask, axis=-1)
     img_new = cv2.imread(Pic_Path)
     result = img_new.copy()
     result[mask[0] == 0] = 0
-    cv2.imwrite("temp.png",result)
+    cv2.imwrite("images/temp.png",result)
 
-    img = Image.open("temp.png")
+    img = Image.open("images/temp.png")
 
     hog_in = np.array(img)
     fd, hog_image = hog(hog_in,orientations=9, pixels_per_cell=(8, 8),cells_per_block=(2, 2), visualize=True, multichannel=True)
-    x1 = np.zeros((1,) + img_size + (3,), dtype="float32")
+    x1 = np.zeros((1,) + self.img_size + (3,), dtype="float32")
     x2 = np.zeros((1,) + (34596,) , dtype="float32")
     x1[0] = img
     x2[0] = fd
@@ -96,3 +98,8 @@ class Detection:
       output = "disease 00"
 
     return output
+
+
+if __name__ == "__main__":
+  model = Model()
+  print(model.classify('images/d1641031959414.jpg'))

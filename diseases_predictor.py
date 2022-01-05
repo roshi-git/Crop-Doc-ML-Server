@@ -1,5 +1,6 @@
 from firebase_services import FirebaseServices
-import os
+# import os
+from model import Model
 
 class DiseasePredictor:
 
@@ -8,23 +9,19 @@ class DiseasePredictor:
 
     def predict_disease(self):
 
-        if not os.path.exists('images'):
-            os.makedirs('images')
-        os.chdir('images')
-
         firebase = FirebaseServices()
 
         # DOWNLOAD IMAGE FROM FIREBASE STORAGE
-        file_name = firebase.download_image(self.image_URL)
+        file_path = firebase.download_image(self.image_URL)
 
         # PREDICT DISEASE
-        prediction = "Yellow Leaf Curl"
+        model = Model()
+        prediction = model.classify(file_path)
 
-        # PLOT DISEASE
-        plotted_image = 'eye.png'
-
-        # UPLOAD IMAGE TO FIREBASE STORAGE
-        image_URL = firebase.upload_image(plotted_image)
+        # UPLOAD PLOTTED IMAGE TO FIREBASE STORAGE
+        # plotted_image = plot_image(file_name)
+        # image_URL = firebase.upload_image(plotted_image)
+        image_URL = self.image_URL
 
         # RETURN IMAGE LINK AND PREDICTED RESULT
         return {
