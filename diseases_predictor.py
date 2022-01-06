@@ -1,13 +1,12 @@
 from firebase_services import FirebaseServices
-# import os
-from model import Model
+import os
 
 class DiseasePredictor:
 
     def __init__(self, image_URL):
         self.image_URL = image_URL
 
-    def predict_disease(self):
+    def predict_disease(self, model):
 
         firebase = FirebaseServices()
 
@@ -15,8 +14,8 @@ class DiseasePredictor:
         file_path = firebase.download_image(self.image_URL)
 
         # PREDICT DISEASE
-        model = Model()
         prediction = model.classify(file_path)
+        os.remove(file_path)
 
         # UPLOAD PLOTTED IMAGE TO FIREBASE STORAGE
         # plotted_image = plot_image(file_name)

@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from diseases_predictor import DiseasePredictor
+from model import Model
 
 
 app = Flask(__name__)
+model = Model()
 
 @app.route('/')
 def index():
@@ -17,7 +19,7 @@ def predict_disease():
     if request.method == 'POST':
         image_URL = request.json['image_URL']
         disease_predictor = DiseasePredictor(image_URL)
-        result = disease_predictor.predict_disease()
+        result = disease_predictor.predict_disease(model)
 
         return jsonify(result)
 
