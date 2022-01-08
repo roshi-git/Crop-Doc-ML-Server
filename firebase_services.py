@@ -12,8 +12,22 @@ class FirebaseServices:
         with open('resources/firebase/config.json') as json_file:
             firebase_config = json.load(json_file)
 
-        firebase = pyrebase.initialize_app(firebase_config)
-        self.firebase_storage = firebase.storage()
+        self.firebase = pyrebase.initialize_app(firebase_config)
+        
+
+    # UPDATE THE SERVER IP ADDRESS
+    def update_server_address(self):
+
+        database = self.firebase.database()
+
+        ip_address = requests.get('https://api.ipify.org').content.decode('utf8')
+        print('Server IP address: {}'.format(ip_address))
+
+        server_url = ip_address + ':5000/predict_disease'
+        database.child('server_url').set(server_url)
+
+        last_updated = int(round(time.time() * 1000))
+        database.child('last_updated').set(last_updated)
 
 
     # DOWNLOAD IMAGE
@@ -37,7 +51,8 @@ class FirebaseServices:
         file_name = 'processed_images/' + 'p' + str(round(time.time() * 1000))
 
         # UPLOAD IMAGE AND GET DOWNLOAD URL
-        self.firebase_storage.child(file_name).put(processed_image)
-        image_URL = self.firebase_storage.child(file_name).get_url(None)
+        firebase_storage = self.firebase.storage()
+        firebase_storage.child(file_name).put(processed_image)
+        image_URL = firebase_storage.child(file_name).get_url(None)
 
         return image_URL
