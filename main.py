@@ -4,6 +4,8 @@ from diseases_predictor import DiseasePredictor
 from firebase_services import FirebaseServices
 from model import Model
 
+import sys
+
 
 app = Flask(__name__)
 model = Model()
@@ -31,4 +33,14 @@ if __name__ == '__main__':
     firebase = FirebaseServices()
     firebase.update_server_address()
 
-    app.run(host='127.0.0.1', port=5000)
+    address = '127.0.0.1'
+    port = '5000'
+    
+    args = sys.argv
+    if len(args) == 2:
+        address = args[1]
+    elif len(args) == 3:
+        address = args[1]
+        port = args[2]
+
+    app.run(host=address, port=port)
