@@ -1,4 +1,6 @@
 cloud_server_env
 images
+resources
+__pycache__
 mixed_best_model0.hdf5
 tomato.h5

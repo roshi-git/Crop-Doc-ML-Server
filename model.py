@@ -12,8 +12,8 @@ class Model:
 
   def __init__(self):
     self.img_size = (256,256)
-    self.seg_model = keras.models.load_model('models/tomato.h5', custom_objects={"dice_coef": self.dice_coef, "iou_coef":self.iou_coef})
-    self.class_model = keras.models.load_model('models/mixed_best_model0.hdf5', custom_objects={"recall": self.recall, "precision":self.precision})
+    self.seg_model = keras.models.load_model('resources/models/tomato.h5', custom_objects={"dice_coef": self.dice_coef, "iou_coef":self.iou_coef})
+    self.class_model = keras.models.load_model('resources/models/mixed_best_model0.hdf5', custom_objects={"recall": self.recall, "precision":self.precision})
 
 
   def dice_coef(self, y_true, y_pred, smooth=1):

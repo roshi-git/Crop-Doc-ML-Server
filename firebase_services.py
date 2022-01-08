@@ -2,20 +2,15 @@ import pyrebase
 import requests
 import time
 import os
+import json
 
 class FirebaseServices:
 
     def __init__(self):
 
-        firebase_config = {
-            'apiKey': "AIzaSyBnA-8FAjYvvMk2b7uOvfRN1JzTzRtSA8o",
-            'authDomain': "crop-doc.firebaseapp.com",
-            'databaseURL': "https://crop-doc-default-rtdb.asia-southeast1.firebasedatabase.app",
-            'projectId': "crop-doc",
-            'storageBucket': "crop-doc.appspot.com",
-            'messagingSenderId': "300370395077",
-            'appId': "1:300370395077:web:6f1d49e9e9654b5d7e55ac"
-        }
+        firebase_config = {}
+        with open('resources/firebase/config.json') as json_file:
+            firebase_config = json.load(json_file)
 
         firebase = pyrebase.initialize_app(firebase_config)
         self.firebase_storage = firebase.storage()
