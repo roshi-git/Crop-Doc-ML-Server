@@ -23,7 +23,7 @@ class FirebaseServices:
         ip_address = requests.get('https://api.ipify.org').content.decode('utf8')
         print('Server IP address: {}'.format(ip_address))
 
-        server_url = ip_address + ':5000/predict_disease'
+        server_url = 'http://' + ip_address + ':5000/predict_disease'
         database.child('server_url').set(server_url)
 
         last_updated = int(round(time.time() * 1000))
